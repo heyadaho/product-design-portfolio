@@ -5,6 +5,9 @@ node_modules/
 dist/
 .astro/
 
+# Storybook
+storybook-static/
+
 # Environment
 .env
 .env.*

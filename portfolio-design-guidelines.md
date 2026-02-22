@@ -60,6 +60,14 @@
 - **Cards (project list):** Title, optional tagline/category, year/client, featured image; link to case study.
 - **Footer:** Minimal (e.g. copyright, contact, social links). Optional: short line on privacy/cookies (Anton Sten).
 
+### 1.7 Component library (shadcn/ui)
+
+- **Library:** [shadcn/ui](https://ui.shadcn.com) (New York style) is integrated so you own and customize the component code.
+- **Location:** React components live in `src/components/ui/` (e.g. `button.tsx`). Utilities: `src/lib/utils.ts` (`cn()`).
+- **Theming:** Edit CSS variables in `src/styles/global.css` (`:root` and `.dark`) to change colors. `--primary` / `--accent` are aligned with the portfolio accent (#53B880); `--background` matches surface.
+- **Usage in Astro:** Import React components and use with a client directive, e.g. `import { Button } from '@/components/ui/button'` then `<Button client:load />` (or `client:visible`) so they hydrate.
+- **Adding components:** Run `npx shadcn@latest add <name>` (e.g. `card`, `input`, `dialog`). Config: `components.json`.
+
 ---
 
 ## 2. Homepage structure & content

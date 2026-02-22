@@ -52,7 +52,7 @@ const imageURL = ogImage ? new URL(ogImage.startsWith('/') ? ogImage : `/${ogIma
     </script>
   </head>
   <body class="flex min-h-screen flex-col">
-    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-4 focus:z-50 focus:rounded focus:bg-accent focus:px-3 focus:py-2 focus:text-white dark:focus:bg-accent">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-4 focus:z-50 focus:rounded focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground focus:ring-2 focus:ring-ring focus:ring-offset-2 dark:focus:ring-offset-background">
       Skip to content
     </a>
     <Header />
@@ -62,36 +62,6 @@ const imageURL = ogImage ? new URL(ogImage.startsWith('/') ? ogImage : `/${ogIma
     <Footer />
       <ViewTransitions />
     <script>
-      // #region agent log
-      function _log(h, loc, msg, data) {
-        const payload = { sessionId: 'c83b5a', hypothesisId: h, location: loc, message: msg, data: data || {}, timestamp: Date.now() };
-        fetch('http://127.0.0.1:7339/ingest/82ac6923-2b57-4a09-a3c1-ad9156ddc81a', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'c83b5a' }, body: JSON.stringify(payload) }).catch(function(){});
-      }
-      function getStyleSnapshot(el) {
-        if (!el) return null;
-        const s = window.getComputedStyle(el);
-        return { letterSpacing: s.letterSpacing, outlineWidth: s.outlineWidth, outlineStyle: s.outlineStyle, paddingLeft: s.paddingLeft, paddingRight: s.paddingRight, boxShadow: s.boxShadow ? s.boxShadow.substring(0, 50) : '' };
-      }
-      document.addEventListener('click', function(e) {
-        const target = e.target;
-        const focusable = target.closest ? target.closest('a, button, [tabindex]:not([tabindex="-1"])') : null;
-        const el = focusable || target;
-        const h1 = document.querySelector('h1');
-        const before = getStyleSnapshot(el);
-        const scrollBefore = { scrollY: window.scrollY, scrollX: window.scrollX };
-        const h1Before = h1 ? { left: h1.getBoundingClientRect().left, width: h1.getBoundingClientRect().width, letterSpacing: getComputedStyle(h1).letterSpacing } : null;
-        _log('A', 'Layout.astro:click:before', 'click before', { tag: el.tagName, before: before, scroll: scrollBefore, h1: h1Before });
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            const after = getStyleSnapshot(el);
-            const scrollAfter = { scrollY: window.scrollY, scrollX: window.scrollX };
-            const h1After = h1 ? { left: h1.getBoundingClientRect().left, width: h1.getBoundingClientRect().width, letterSpacing: getComputedStyle(h1).letterSpacing } : null;
-            const docActive = document.activeElement;
-            _log('B', 'Layout.astro:click:after', 'click after', { after: after, scroll: scrollAfter, h1: h1After, activeTag: docActive ? docActive.tagName : null, letterSpacingChanged: before && after && before.letterSpacing !== after.letterSpacing, h1LeftChanged: h1Before && h1After && h1Before.left !== h1After.left, scrollChanged: scrollBefore.scrollY !== scrollAfter.scrollY || scrollBefore.scrollX !== scrollAfter.scrollX });
-          });
-        });
-      }, true);
-      // #endregion
       function initScrollAnimations() {
         const observer = new IntersectionObserver(
           (entries) => {
@@ -106,12 +76,19 @@ const imageURL = ogImage ? new URL(ogImage.startsWith('/') ? ogImage : `/${ogIma
         );
         document.querySelectorAll('[data-animate], [data-animate-stagger]').forEach((el) => observer.observe(el));
       }
+      function applyThemeFromStorage() {
+        const theme = localStorage.getItem('theme');
+        const isDark = theme === 'dark' || (theme === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', isDark);
+      }
+      applyThemeFromStorage();
       document.fonts.ready.then(() => {
         initScrollAnimations();
       }).catch(() => {
         initScrollAnimations();
       });
       document.addEventListener('astro:page-load', () => {
+        applyThemeFromStorage();
         document.fonts.ready.then(() => {
           initScrollAnimations();
         }).catch(() => {
