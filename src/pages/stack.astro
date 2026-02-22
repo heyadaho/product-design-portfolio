@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import { stackItems } from '../data/stack';
+
+/** Resolve icon URL: domain → Google favicon; otherwise use as-is (path or full URL). */
+function iconUrl(icon: string | undefined): string | undefined {
+  if (!icon) return undefined;
+  if (icon.startsWith('http') || icon.startsWith('/')) return icon;
+  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(icon)}&sz=128`;
+}
+---
+<Layout title="Stack" description="Tools and apps I use for design and product work.">
+  <Section class="pt-16 md:pt-24">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100" data-animate="fade-in">
+      Stack
+    </h1>
+    <p class="mt-2 text-lg text-gray-600 dark:text-gray-400" data-animate="fade-in">
+      Tools and apps I use day to day for design, development, and getting things done.
+    </p>
+    <div class="mt-10 overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700" data-animate="fade-in">
+      <table class="w-full min-w-[600px] border-collapse text-left">
+        <thead>
+          <tr class="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/80">
+            <th scope="col" class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
+              Name
+            </th>
+            <th scope="col" class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
+              Description
+            </th>
+            <th scope="col" class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100">
+              Platforms
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {stackItems.map((item) => {
+            const iconSrc = iconUrl(item.icon);
+            return (
+              <tr class="border-b border-gray-100 transition-colors hover:bg-gray-50/50 dark:border-gray-800 dark:hover:bg-gray-800/50">
+                <td class="px-4 py-3">
+                  {item.link ? (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="group flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-inset focus:ring-offset-0 rounded"
+                    >
+                      {iconSrc && (
+                        <span class="flex h-8 w-8 shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700" aria-hidden="true">
+                          <img src={iconSrc} alt="" width="32" height="32" class="h-full w-full object-contain" loading="lazy" />
+                        </span>
+                      )}
+                      <span class="font-medium text-gray-900 group-hover:text-accent dark:text-gray-100 dark:group-hover:text-accent">
+                        {item.name}
+                      </span>
+                    </a>
+                  ) : (
+                    <span class="flex items-center gap-3">
+                      {iconSrc && (
+                        <span class="flex h-8 w-8 shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700" aria-hidden="true">
+                          <img src={iconSrc} alt="" width="32" height="32" class="h-full w-full object-contain" loading="lazy" />
+                        </span>
+                      )}
+                      <span class="font-medium text-gray-900 dark:text-gray-100">{item.name}</span>
+                    </span>
+                  )}
+                </td>
+                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                  {item.description}
+                </td>
+                <td class="px-4 py-3">
+                  <span class="flex flex-wrap gap-1.5">
+                    {item.platforms.map((p) => (
+                      <span class="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                        {p}
+                      </span>
+                    ))}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </Section>
+</Layout>
