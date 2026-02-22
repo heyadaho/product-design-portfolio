@@ -10,11 +10,11 @@ const caseStudies = (await getCollection('case-studies')).sort(
 ---
 <Layout title="Work" description="Case studies and product design work.">
   <Section class="pt-16 md:pt-24">
-    <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100">Work</h1>
-    <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100" data-animate="fade-in">Work</h1>
+    <p class="mt-2 text-lg text-gray-600 dark:text-gray-400" data-animate="fade-in">
       Selected case studies and product design projects.
     </p>
-    <ul class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <ul class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3" data-animate-stagger>
       {caseStudies.map((entry) => (
         <li>
           <Card

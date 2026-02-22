@@ -23,7 +23,8 @@ const nav = [
       </button>
       <a href="/" class="text-lg font-semibold text-gray-900 hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded dark:text-gray-100 dark:hover:text-accent dark:focus:ring-offset-gray-900">Portfolio</a>
     </div>
-    <ul class="flex items-center gap-6">
+    <!-- Desktop nav -->
+    <ul class="hidden items-center gap-6 md:flex">
       {nav.map(({ href, label }) => (
         <li>
           <a
@@ -40,15 +41,55 @@ const nav = [
         </li>
       ))}
     </ul>
+    <!-- Mobile menu button -->
+    <button
+      type="button"
+      id="mobile-menu-toggle"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="rounded-lg p-2 text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100 dark:focus:ring-offset-gray-900 md:hidden"
+    >
+      <span class="sr-only">Open menu</span>
+      <svg id="menu-icon-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg id="menu-icon-close" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
   </nav>
+  <!-- Mobile menu overlay -->
+  <div
+    id="mobile-menu"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Main menu"
+    class="fixed inset-0 z-40 translate-x-full bg-surface/95 backdrop-blur transition-transform duration-300 ease-out md:hidden"
+    style="top: var(--header-height, 57px);"
+  >
+    <ul class="flex flex-col gap-1 px-6 py-6">
+      {nav.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[
+              'block rounded-lg px-4 py-3 text-base font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:focus:ring-offset-gray-900',
+              currentPath === href || (href !== '/' && currentPath.startsWith(href))
+                ? 'text-accent bg-accent/10 dark:bg-accent/20'
+                : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800',
+            ]}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
   <script>
+    // @ts-nocheck
     (function() {
-      var btn = document.getElementById('theme-toggle');
       var html = document.documentElement;
-      function setLabel() {
-        var isDark = html.classList.contains('dark');
-        btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-      }
       function applyTheme(dark) {
         if (dark) {
           html.classList.add('dark');
@@ -57,12 +98,56 @@ const nav = [
           html.classList.remove('dark');
           localStorage.setItem('theme', 'light');
         }
-        setLabel();
+        updateThemeLabel();
       }
-      btn.addEventListener('click', function() {
-        applyTheme(!html.classList.contains('dark'));
+      function updateThemeLabel() {
+        var btn = document.getElementById('theme-toggle');
+        if (btn) {
+          var isDark = html.classList.contains('dark');
+          btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+      }
+      document.addEventListener('click', function(e) {
+        if (e.target && (e.target.id === 'theme-toggle' || e.target.closest('#theme-toggle'))) {
+          e.preventDefault();
+          applyTheme(!html.classList.contains('dark'));
+        }
       });
-      setLabel();
+      updateThemeLabel();
+      document.addEventListener('astro:page-load', updateThemeLabel);
+    })();
+    (function() {
+      var toggle = document.getElementById('mobile-menu-toggle');
+      var menu = document.getElementById('mobile-menu');
+      var openIcon = document.getElementById('menu-icon-open');
+      var closeIcon = document.getElementById('menu-icon-close');
+      if (!toggle || !menu || !openIcon || !closeIcon) return;
+      function openMenu() {
+        menu.classList.remove('translate-x-full');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close menu');
+        openIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu() {
+        menu.classList.add('translate-x-full');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open menu');
+        openIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+      toggle.addEventListener('click', function() {
+        if (menu.classList.contains('translate-x-full')) openMenu();
+        else closeMenu();
+      });
+      menu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', closeMenu);
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !menu.classList.contains('translate-x-full')) closeMenu();
+      });
     })();
   </script>
 </header>

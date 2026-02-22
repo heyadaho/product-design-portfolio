@@ -14,12 +14,12 @@ const featured = caseStudies.length >= 3 ? caseStudies : all.slice(0, 3);
 ---
 <Layout title="Home" description="Design Leader. Hands-on Maker. London-based product design and team leadership.">
   <Section class="pt-16 md:pt-24">
-    <div class="mx-auto max-w-prose text-center">
+    <div class="mx-auto max-w-prose text-center" data-animate="fade-in">
       <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100">
         Design Leader. Hands-on Maker.
       </h1>
       <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
-        London-based problem solver focused on finding clear solutions to complex problems. I shape product teams that excel at craft, design customer journeys with intention, and deliver work that drives real commercial results.
+        London-based problem solver focused on finding clear solutions to complex problems. I build product teams that excel at craft, shape customer journeys with intention, and deliver work that drives real commercial results.
       </p>
       <div class="mt-8">
         <Button href="/work">See how I work</Button>
@@ -28,8 +28,8 @@ const featured = caseStudies.length >= 3 ? caseStudies : all.slice(0, 3);
   </Section>
 
   <Section class="border-t border-gray-200 dark:border-gray-800">
-    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Featured work</h2>
-    <ul class="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100" data-animate="fade-in">Featured work</h2>
+    <ul class="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3" data-animate-stagger>
       {featured.map((entry) => (
         <li>
           <Card

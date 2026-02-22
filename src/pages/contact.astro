@@ -1,15 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Section from '../components/Section.astro';
+import ContactForm from '../components/ContactForm.astro';
 ---
 <Layout title="Contact" description="Get in touch — product designer portfolio.">
   <Section class="pt-16 md:pt-24">
     <div class="mx-auto max-w-prose">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100">Contact</h1>
-      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100" data-animate="fade-in">Contact</h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400" data-animate="fade-in">
         I'd love to hear from you. Reach out for project work, speaking, or collaboration.
       </p>
-      <ul class="mt-8 space-y-4">
+      <ul class="mt-8 space-y-4" data-animate="fade-in">
         <li>
           <a
             href="mailto:edlakedesign@gmail.com"
@@ -29,6 +30,7 @@ import Section from '../components/Section.astro';
           </a>
         </li>
       </ul>
+      <ContactForm formAction={import.meta.env.PUBLIC_FORMSPREE_ENDPOINT} />
     </div>
   </Section>
 </Layout>
