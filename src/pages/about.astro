@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+---
+<Layout title="About" description="About — product designer portfolio.">
+  <Section class="pt-16 md:pt-24">
+    <div class="mx-auto max-w-prose">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100">About</h1>
+      <div class="mt-8 space-y-6 text-gray-600 dark:text-gray-400">
+        <p>
+          I'm a product designer focused on clarity, user-centered solutions, and shipping work that matters.
+        </p>
+        <p>
+          I work hands-on with teams when things are still unclear—designing core flows, setting direction,
+          and raising the bar on product quality.
+        </p>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Skills & tools</h2>
+        <p>
+          UX research, interaction design, design systems, prototyping. Figma, prototyping tools, and collaboration with engineering.
+        </p>
+      </div>
+      <div class="mt-10">
+        <Button href="/contact">Get in touch</Button>
+      </div>
+    </div>
+  </Section>
+</Layout>

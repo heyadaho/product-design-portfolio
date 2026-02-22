@@ -1,0 +1,79 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Button from '../../components/Button.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('case-studies');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, tagline, year, role, client, team, featuredImage, link, metaDescription } = entry.data;
+---
+<Layout title={title} description={metaDescription} ogImage={featuredImage}>
+  <article>
+    <Section class="pt-16 md:pt-24">
+      <div class="mx-auto max-w-prose">
+        {client && <p class="text-sm font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">{client}</p>}
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100">{title}</h1>
+        <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">{tagline}</p>
+        <dl class="mt-6 flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
+          {year && (
+            <>
+              <dt class="font-medium text-gray-500 dark:text-gray-500">Year</dt>
+              <dd>{year}</dd>
+            </>
+          )}
+          {role && (
+            <>
+              <dt class="font-medium text-gray-500 dark:text-gray-500">Role</dt>
+              <dd>{role}</dd>
+            </>
+          )}
+          {team && (
+            <>
+              <dt class="font-medium text-gray-500 dark:text-gray-500">Team</dt>
+              <dd>{team}</dd>
+            </>
+          )}
+        </dl>
+        {featuredImage && (
+          <div class="mt-8 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+            <img
+              src={featuredImage}
+              alt=""
+              class="w-full object-cover"
+              width="800"
+              height="450"
+            />
+          </div>
+        )}
+      </div>
+    </Section>
+
+    <Section class="border-t border-gray-200 dark:border-gray-800" narrow>
+      <div class="prose prose-gray max-w-none prose-headings:font-semibold prose-a:text-accent prose-a:no-underline hover:prose-a:underline dark:prose-invert">
+        <Content />
+      </div>
+      <div class="mt-12 flex flex-wrap gap-4">
+        {link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-900"
+          >
+            View project
+          </a>
+        )}
+        <Button href="/work">Back to work</Button>
+      </div>
+    </Section>
+  </article>
+</Layout>

@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const caseStudies = (await getCollection('case-studies'))
+  .filter((c) => c.data.featured)
+  .slice(0, 3);
+// If fewer than 3 featured, add latest
+const all = await getCollection('case-studies');
+const featured = caseStudies.length >= 3 ? caseStudies : all.slice(0, 3);
+---
+<Layout title="Home" description="Design Leader. Hands-on Maker. London-based product design and team leadership.">
+  <Section class="pt-16 md:pt-24">
+    <div class="mx-auto max-w-prose text-center">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl dark:text-gray-100">
+        Design Leader. Hands-on Maker.
+      </h1>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+        London-based problem solver focused on finding clear solutions to complex problems. I shape product teams that excel at craft, design customer journeys with intention, and deliver work that drives real commercial results.
+      </p>
+      <div class="mt-8">
+        <Button href="/work">See how I work</Button>
+      </div>
+    </div>
+  </Section>
+
+  <Section class="border-t border-gray-200 dark:border-gray-800">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Featured work</h2>
+    <ul class="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {featured.map((entry) => (
+        <li>
+          <Card
+            href={`/work/${entry.slug}`}
+            title={entry.data.title}
+            tagline={entry.data.tagline}
+            year={entry.data.year}
+            image={entry.data.featuredImage}
+          />
+        </li>
+      ))}
+    </ul>
+    <div class="mt-10 text-center">
+      <Button href="/work" variant="secondary">View all work</Button>
+    </div>
+  </Section>
+</Layout>

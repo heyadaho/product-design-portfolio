@@ -1,0 +1,36 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  tagline: string;
+  year?: string;
+  image?: string;
+  class?: string;
+}
+
+const { href, title, tagline, year, image, class: className } = Astro.props;
+const imgSrc = image || '/images/work/placeholder.svg';
+---
+<a
+  href={href}
+  class:list={[
+    'group block overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:focus:ring-offset-gray-900',
+    className,
+  ]}
+>
+  <div class="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-700">
+    <img
+      src={imgSrc}
+      alt=""
+      class="h-full w-full object-cover transition-transform group-hover:scale-[1.02]"
+      loading="lazy"
+      width="800"
+      height="450"
+    />
+  </div>
+  <div class="p-5">
+    {year && <p class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">{year}</p>}
+    <h2 class="mt-1 text-lg font-semibold text-gray-900 group-hover:text-accent dark:text-gray-200">{title}</h2>
+    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{tagline}</p>
+  </div>
+</a>
